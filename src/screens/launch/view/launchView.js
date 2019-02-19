@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import {} from 'react-native';
+import { FlatList } from 'react-native';
 
 // Constants
 
 // Components
-
-// Styles
-import styles from './launchStyles';
+import RocketCard from '../../../components/rocketCard';
 
 class LaunchView extends Component {
   /* Props
-    * ------------------------------------------------
-    *   @prop { type }    name                - Description....
-    */
+   * ------------------------------------------------
+   *   @prop { type }    name                - Description....
+   */
 
   constructor(props) {
     super(props);
@@ -24,11 +22,33 @@ class LaunchView extends Component {
   // Component Functions
 
   render() {
-    // eslint-disable-next-line
-    const {} = this.props;
+    const { launches, handleLoadMore } = this.props;
 
-    // eslint-disable-next-line
-    return null;
+    return (
+      <FlatList
+        data={launches}
+        onEndReached={() => handleLoadMore()}
+        onEndReachedThreshold={1}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => {
+          let image = '';
+          if (item.rocket && item.rocket.imageURL) {
+            const { rocket } = item;
+            image = `${rocket.imageURL.split('_')[0]}_${rocket.imageSizes[0]}.jpg`;
+          }
+
+          return (
+            <RocketCard
+              image={image}
+              title={item.name}
+              description={item.net}
+              id={item.id}
+
+            />
+          );
+        }}
+      />
+    );
   }
 }
 
